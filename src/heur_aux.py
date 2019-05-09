@@ -86,3 +86,25 @@ class CauchyMutation(Mutation):
             x_new = np.array(np.round(x_new), dtype=int)  # optional rounding
         x_new_corrected = self.correction.correct(x_new)
         return x_new_corrected
+
+
+from scipy.stats import levy
+
+class LevyMutation(Mutation):
+
+    """
+    Levy mutation
+    """
+
+    def __init__(self, scale, correction):
+        Mutation.__init__(self, correction)
+        self.scale = scale
+
+    def mutate(self, x):
+        n = np.size(x)
+        scale = self.scale
+        x_new = levy.rvs(scale=scale, size=n)
+        if is_integer(x):
+            x_new = np.array(np.round(x_new), dtype=int)  # optional rounding
+        x_new_corrected = self.correction.correct(x_new)
+        return x_new_corrected
